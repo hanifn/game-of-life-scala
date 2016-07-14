@@ -16,7 +16,7 @@ class LifeGrid(seed: String) {
 
   val liveSeeds = LiveCellParser(seed)
 
-  def edge = {
+  def size = {
     var x = 0
     var y = 0
 
@@ -29,16 +29,13 @@ class LifeGrid(seed: String) {
   }
 
   def run: String = {
-    val (maxX, maxY) = edge
+    val (maxX, maxY) = size
 
     (0 to maxX).map { x =>
-      val row = (0 to maxY).map { y =>
+      (0 to maxY).map { y =>
         if (liveSeeds.contains(LiveCell(x - 1, y - 1))) "O"
         else "."
-      }
-
-      val joinedRow = row.foldLeft(""){(result,cell) =>  result + cell}
-      joinedRow + "\n"
+      } mkString("", "", "\n")
 
     } mkString ""
   }

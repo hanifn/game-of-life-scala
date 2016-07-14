@@ -20,7 +20,7 @@ class LifeGridTest extends WordSpec with MustMatchers {
   }
 
   "run" must {
-    "return a board representation " in {
+    "return a board representation for a block" in {
       val seed = "0,0\n0,1\n1,0\n1,1"
       val grid = new LifeGrid(seed)
 
@@ -28,11 +28,32 @@ class LifeGridTest extends WordSpec with MustMatchers {
 
       result mustEqual "....\n.OO.\n.OO.\n....\n"
     }
+
+    "return a board representation for a boat" in {
+      val seed =
+        """0,0
+          |0,1
+          |1,0
+          |2,1
+          |1,2
+          |""".stripMargin
+      val grid = new LifeGrid(seed)
+
+      val result = grid.run
+
+      result mustEqual
+        """.....
+          |.OO..
+          |.O.O.
+          |..O..
+          |.....
+          |""".stripMargin
+    }
   }
 
-  "edge" must {
+  "size" must {
 
-    "find the extreme edge of live cells" in {
+    "find the size of the grid" in {
       val seed =
         """0,0
           |0,1
@@ -43,7 +64,7 @@ class LifeGridTest extends WordSpec with MustMatchers {
 
       val grid = new LifeGrid(seed)
 
-      val result = grid.edge
+      val result = grid.size
 
       result mustEqual (4,4)
     }
