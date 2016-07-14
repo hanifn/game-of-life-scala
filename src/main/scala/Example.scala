@@ -46,9 +46,34 @@ class LifeGrid(val liveCells: Seq[LiveCell]) {
 
   def neighbourCount(cell: LiveCell): Int = {
     liveCells.count { c =>
-      (Math.abs(c.x - cell.x) == 1) || (Math.abs(c.y - cell.y) == 1)
+      val dx = c.x - cell.x
+      val dy = c.y - cell.y
+
+      //(Math.abs(c.x - cell.x) < 2) && (Math.abs(c.y - cell.y) < 2 && (c.x != cell.x && c.y != cell.y))
+      (dx >= -1 && dx <= 1) &&
+      (dy >= -1 && dy <= 1) &&
+      (cell != c)
+
+
     }
   }
+
+  def getAdjacentCells: Seq[LiveCell] =
+    liveCells.flatMap{cell =>
+      val x = cell.x
+      val y = cell.y
+      //if (liveCells.contains(LiveCell(cell.x - 1, cell.y)))
+      Seq(
+        LiveCell(x-1, y-1),
+        LiveCell(x, y-1),
+        LiveCell(x+1, y-1),
+        LiveCell(x-1, y),
+        LiveCell(x+1, y),
+        LiveCell(x-1, y +1),
+        LiveCell(x, y+1),
+        LiveCell(x+1, y +1)
+      )
+    }
 
   def tick: LifeGrid = {
     val (maxX, maxY) = size
@@ -59,7 +84,17 @@ class LifeGrid(val liveCells: Seq[LiveCell]) {
       else false
     }
 
-    new LifeGrid(cellsStillAlive)
+    val adjacentCells: Seq[LiveCell] = getAdjacentCells
+
+    val deadCells = adjacentCells.filterNot{ cell =>
+      liveCells.contains(cell)
+    }
+
+    val newLiveCells = deadCells.filter{ cell =>
+      neighbourCount(cell) == 3
+    }
+
+    new LifeGrid((cellsStillAlive ++ newLiveCells).distinct)
   }
 }
 
