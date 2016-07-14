@@ -3,12 +3,12 @@ class Example {
 }
 
 object LiveCellParser   {
-  def apply(seed: String): Seq[LiveCell] = {
+  def apply(seed: String): Set[LiveCell] = {
     seed.split("\n").map { coord =>
       val xy = coord.split(",")
 
       LiveCell(xy(0).toInt, xy(1).toInt)
-    }
+    }.toSet
   }
 }
 
@@ -18,7 +18,7 @@ object LifeGrid {
   }
 }
 
-class LifeGrid(val liveCells: Seq[LiveCell]) {
+class LifeGrid(val liveCells: Set[LiveCell]) {
 
   def size = {
     var x = 0
@@ -58,12 +58,12 @@ class LifeGrid(val liveCells: Seq[LiveCell]) {
     }
   }
 
-  def getAdjacentCells: Seq[LiveCell] =
+  def getAdjacentCells: Set[LiveCell] =
     liveCells.flatMap{cell =>
       val x = cell.x
       val y = cell.y
       //if (liveCells.contains(LiveCell(cell.x - 1, cell.y)))
-      Seq(
+      Set(
         LiveCell(x-1, y-1),
         LiveCell(x, y-1),
         LiveCell(x+1, y-1),
@@ -78,13 +78,13 @@ class LifeGrid(val liveCells: Seq[LiveCell]) {
   def tick: LifeGrid = {
     val (maxX, maxY) = size
 
-    val cellsStillAlive: Seq[LiveCell] = liveCells.filter{ cell =>
+    val cellsStillAlive: Set[LiveCell] = liveCells.filter{ cell =>
       val count = neighbourCount(cell)
       if(count == 2  || count == 3) true
       else false
     }
 
-    val adjacentCells: Seq[LiveCell] = getAdjacentCells
+    val adjacentCells: Set[LiveCell] = getAdjacentCells
 
     val deadCells = adjacentCells.filterNot{ cell =>
       liveCells.contains(cell)
@@ -94,7 +94,7 @@ class LifeGrid(val liveCells: Seq[LiveCell]) {
       neighbourCount(cell) == 3
     }
 
-    new LifeGrid((cellsStillAlive ++ newLiveCells).distinct)
+    new LifeGrid(cellsStillAlive ++ newLiveCells)
   }
 }
 

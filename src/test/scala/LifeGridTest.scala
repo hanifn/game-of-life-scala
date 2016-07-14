@@ -15,7 +15,7 @@ class LifeGridTest extends WordSpec with MustMatchers {
 
       val grid = LifeGrid(seed)
 
-      grid.liveCells mustEqual Seq(LiveCell(0, 0), LiveCell(0, 1), LiveCell(1, 0), LiveCell(1, 1))
+      grid.liveCells mustEqual Set(LiveCell(0, 0), LiveCell(0, 1), LiveCell(1, 0), LiveCell(1, 1))
     }
   }
 
@@ -73,7 +73,7 @@ class LifeGridTest extends WordSpec with MustMatchers {
   "neigbourCount" must {
 
     "find the count of live neigbhours of a given cell" in {
-      val grid = new LifeGrid(Seq(LiveCell(0,0), LiveCell(0,1), LiveCell(0,2)))
+      val grid = new LifeGrid(Set(LiveCell(0,0), LiveCell(0,1), LiveCell(0,2)))
 
       grid.neighbourCount(LiveCell(0,0)) mustEqual 1
       grid.neighbourCount(LiveCell(0,1)) mustEqual 2
@@ -86,9 +86,9 @@ class LifeGridTest extends WordSpec with MustMatchers {
   "getAdjacentCell" must {
 
     "return all neighbours of cell" in {
-      val grid = new LifeGrid(Seq(LiveCell(0,0)))
+      val grid = new LifeGrid(Set(LiveCell(0,0)))
 
-      grid.getAdjacentCells must contain theSameElementsAs(Seq(
+      grid.getAdjacentCells mustEqual Set(
         LiveCell(-1,-1),
         LiveCell(-1,0),
         LiveCell(-1,1),
@@ -97,7 +97,7 @@ class LifeGridTest extends WordSpec with MustMatchers {
         LiveCell(+1,-1),
         LiveCell(+1,0),
         LiveCell(+1,1)
-      ))
+      )
     }
   }
 
@@ -113,7 +113,7 @@ class LifeGridTest extends WordSpec with MustMatchers {
 
       val nextGrid = grid.tick
 
-      nextGrid.liveCells must contain theSameElementsAs Seq(LiveCell(1,-1), LiveCell(1,0), LiveCell(1,1))
+      nextGrid.liveCells mustEqual Set(LiveCell(1,-1), LiveCell(1,0), LiveCell(1,1))
     }
   }
 
