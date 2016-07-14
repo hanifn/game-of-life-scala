@@ -3,26 +3,26 @@ import org.scalatest.{ FunSuite, MustMatchers, WordSpec }
 class LifeGridTest extends WordSpec with MustMatchers {
 
 
-  "constructor" must {
+  //TODO: Maybe move the test down to the parser?
+  "Companion Object" must {
 
-    "store a list representation of the seed data" in {
+    "construct a LifeGrid with the seed data" in {
       val seed =
         """0,0
           |0,1
           |1,0
           |1,1""".stripMargin
 
-      val grid = new LifeGrid(seed)
+      val grid = LifeGrid(seed)
 
       grid.liveSeeds mustEqual Seq(LiveCell(0, 0), LiveCell(0, 1), LiveCell(1, 0), LiveCell(1, 1))
-
     }
   }
 
   "run" must {
     "return a board representation for a block" in {
       val seed = "0,0\n0,1\n1,0\n1,1"
-      val grid = new LifeGrid(seed)
+      val grid = LifeGrid(seed)
 
       val result = grid.run
 
@@ -37,7 +37,7 @@ class LifeGridTest extends WordSpec with MustMatchers {
           |2,1
           |1,2
           |""".stripMargin
-      val grid = new LifeGrid(seed)
+      val grid = LifeGrid(seed)
 
       val result = grid.run
 

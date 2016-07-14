@@ -12,9 +12,13 @@ object LiveCellParser   {
   }
 }
 
-class LifeGrid(seed: String) {
+object LifeGrid {
+  def apply(seed: String): LifeGrid = {
+    new LifeGrid(LiveCellParser(seed))
+  }
+}
 
-  val liveSeeds = LiveCellParser(seed)
+class LifeGrid(val liveSeeds: Seq[LiveCell]) {
 
   def size = {
     var x = 0
