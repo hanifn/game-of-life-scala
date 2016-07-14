@@ -15,7 +15,7 @@ class LifeGridTest extends WordSpec with MustMatchers {
 
       val grid = LifeGrid(seed)
 
-      grid.liveSeeds mustEqual Seq(LiveCell(0, 0), LiveCell(0, 1), LiveCell(1, 0), LiveCell(1, 1))
+      grid.liveCells mustEqual Seq(LiveCell(0, 0), LiveCell(0, 1), LiveCell(1, 0), LiveCell(1, 1))
     }
   }
 
@@ -62,11 +62,40 @@ class LifeGridTest extends WordSpec with MustMatchers {
           |1,2
           |""".stripMargin
 
-      val grid = new LifeGrid(seed)
+      val grid = LifeGrid(seed)
 
       val result = grid.size
 
       result mustEqual (4,4)
     }
   }
+
+  "neigbourCount" must {
+
+    "find the count of live neigbhours of a given cell" in {
+      val grid = new LifeGrid(Seq(LiveCell(0,0), LiveCell(0,1), LiveCell(0,2)))
+
+      grid.neighbourCount(LiveCell(0,0)) mustEqual 1
+      grid.neighbourCount(LiveCell(0,1)) mustEqual 2
+      grid.neighbourCount(LiveCell(0,2)) mustEqual 1
+
+    }
+  }
+
+  "tick" must {
+    "iterate to next grid state" in {
+      val seed =
+        """0,0
+          |1,0
+          |2,0
+          |""".stripMargin
+
+      val grid = LifeGrid(seed)
+
+      val nextGrid = grid.tick
+
+      nextGrid.liveCells mustEqual Seq(LiveCell(0,0), LiveCell(0,1), LiveCell(0,2))
+    }
+  }
+
 }
